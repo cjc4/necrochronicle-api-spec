@@ -1,0 +1,425 @@
+openapi: 3.0.4
+info:
+  title: Necrochronicle OpenAPI specification
+  description: Specification of the Necrochronicle API
+  license:
+    name: GPL 3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.txt
+  version: 0.1.0
+paths:
+  /campaigns/{CampaignID}/factions/{FactionID}/equipment:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+    get:
+      tags:
+       - Equipment
+      summary: List this Faction's Equipment
+      operationId: listEquipment
+      parameters:
+        - in: query
+          name: Name
+          schema:
+            $ref: '#/components/schemas/EquipmentName'
+      responses:
+        "200": # OK
+          description: A list of Equipment
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Equipment'
+              # TODO
+              # example:
+    post:
+      tags:
+        - Equipment
+      summary: Create a new Equipment
+      operationId: createEquipment
+      requestBody:
+        description: Properties for the new Equipment
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Equipment'
+                - required:
+                  - Name
+            # TODO
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created Equipment
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the EquipmentID in this example
+                example: "/campaigns/e6ymQY/factions/C8BqwB/Equipment/1Ejv04"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+              # TODO
+              # examples:
+  /campaigns/{CampaignID}/factions/{FactionID}/units:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+    get:
+      tags:
+        - Units
+      summary: List this Faction's Units
+      operationId: listUnit
+      parameters:
+        - in: query
+          name: Name
+          schema:
+            $ref: '#/components/schemas/UnitName'
+      responses:
+        "200": # OK
+          description: A list of Units
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unit'
+              example:
+                - ID: ILXEgB
+                  Name: Snood the Lesser
+                  Attributes:
+                    Category: Juve
+                    Type: Bonepicker
+                    XP: 1
+                - ID: UYWpOW
+                  Name: Hauberk "Heavy-hand"
+                  Attributes:
+                    Category: Leader
+                    Type: Cawdor Word-Keeper
+                    XP: 7
+    post:
+      tags:
+        - Units
+      summary: Create a new Unit
+      operationId: createUnit
+      requestBody:
+        description: Properties for the new Unit
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Unit'
+                - required:
+                  - Name
+            examples:
+              Elias:
+                $ref: '#/components/examples/UnitEliasBody'
+      responses:
+        "201": # Created
+          description: Details of the newly-created Unit
+          headers:
+            Location:
+              schema:
+                type: string
+                example: "/campaigns/e6ymQY/factions/C8BqwB/Units/YV6x7P"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+              examples:
+                Elias:
+                  $ref: '#/components/examples/UnitElias'
+          links:
+            retrieveUnit:
+              $ref: '#/components/links/retrieveUnit'
+  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+      - $ref: '#/components/parameters/pathUnitID'
+    
+    get:
+      tags:
+        - Units
+      summary: Retrieve a specific Unit
+      operationId: retrieveUnit
+      responses:
+        "200": # OK
+          description: The requested Unit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+              examples:
+                Snood:
+                  $ref: '#/components/examples/UnitSnood'
+    patch:
+      tags:
+        - Units
+      summary: Update a Unit
+      operationId: updateUnit
+      requestBody:
+        description: Properties to update for the Unit
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+            examples:
+              Snood:
+                $ref: '#/components/examples/UnitSnoodBody'
+      responses:
+        "200": # OK
+          description: The updated Unit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+              examples:
+                Snood:
+                  $ref: '#/components/examples/UnitSnood'
+    delete:
+      tags:
+        - Units
+      summary: Delete a Unit
+      operationId: deleteUnit
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Unit
+  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}/equipment:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+      - $ref: '#/components/parameters/pathUnitID'
+    get:
+      tags:
+        - Units
+      summary: List this Unit's Equipment
+      operationId: listUnitEqipmentAssoc
+      parameters:
+        - in: query
+          name: Name
+          schema:
+            $ref: '#/components/schemas/EquipmentName'
+      responses:
+        "200": # OK
+          description: A list of this Unit's Equipment
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipment'
+              # TODO
+              # example:
+  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}/equipment/{EquipmentID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+      - $ref: '#/components/parameters/pathUnitID'
+      - $ref: '#/components/parameters/pathEquipmentID'
+    put:
+      tags:
+        - Units
+      summary: Create a new Unit <- Equipment association
+      operationId: createUnitEquipmentAssoc
+      requestBody: 
+        description: Properties for the new Unit <- Equipment association
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/UnitEquipmentAssoc'
+            # TODO
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created Unit <- Equipment association
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /campaigns/e6ymQY/factions/C8BqwB/Units/ILXEgB/equipment/1Ejv04
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitEquipmentAssoc'
+              # TODO
+              # examples:
+    get:
+      tags:
+        - Units
+      summary: Retrieve a specific Unit <- Equipment association
+      operationId: retrieveUnitEquipmentAssoc
+      responses:
+        "200": # OK
+          description: The requested Unit <- Equipment association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitEquipmentAssoc'
+              # TODO
+              # examples:
+    patch:
+      tags:
+        - Units
+      summary: Update a Unit <- Equipment association
+      operationId: updateUnitEquipmentAssoc
+      requestBody: 
+        description: Properties for the Unit <- Equipment association
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/UnitEquipmentAssoc'
+            # TODO
+            # examples:
+      responses:
+        "200": # OK
+          description: Details of the updated Unit <- Equipment association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitEquipmentAssoc'
+              # TODO
+              # examples:
+    delete:
+      tags:
+        - Units
+      summary: Delete a Unit <- Equipment association
+      operationId: deleteUnitEquipmentAssoc
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Unit <- Equipment association
+components:
+  links:
+    retrieveUnit:
+      description: >
+        The `ID` value returned in the response can be used as the
+        `UnitID` parameter in `GET /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}`.
+      operationId: retrieveUnit
+      parameters:
+        UnitID: '$response.body#/ID'
+  parameters:
+    pathCampaignID:
+      in: path
+      name: CampaignID
+      required: true
+      schema:
+        $ref: '#/components/schemas/CampaignID'
+    pathEquipmentID:
+      in: path
+      name: EquipmentID
+      required: true
+      schema:
+        $ref: '#/components/schemas/EquipmentID'
+    pathFactionID:
+      in: path
+      name: FactionID
+      required: true
+      schema:
+        $ref: '#/components/schemas/FactionID'
+    pathUnitID:
+      in: path
+      name: UnitID
+      required: true
+      schema:
+        $ref: '#/components/schemas/UnitID'
+  schemas:
+    CampaignID:
+      type: string
+      readOnly: true
+      example: e6ymQY
+    Equipment:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/EquipmentID'
+        Name:
+          $ref: '#/components/schemas/EquipmentName'
+        Attributes:
+          type: object
+          additionalProperties: true
+      required:
+        - ID
+    EquipmentID:
+      type: string
+      readOnly: true
+      example: 1Ejv04
+    EquipmentName:
+      type: string
+      example: Stub gun
+    FactionID:
+      type: string
+      readOnly: true
+      example: C8BqwB
+    Unit:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/UnitID'
+        Name:
+          $ref: '#/components/schemas/UnitName'
+        Attributes:
+          type: object
+          additionalProperties: true
+      required:
+        - ID
+    UnitEquipmentAssoc:
+      type: object
+      properties:
+        UnitID:
+          $ref: '#/components/schemas/UnitID'
+        EquipmentID:
+          $ref: '#/components/schemas/EquipmentID'
+        Quantity:
+          type: integer
+    UnitID:
+      type: string
+      readOnly: true
+      example: ILXEgB
+    UnitName:
+      type: string
+      example: Snood the lesser
+  examples:
+    UnitElias:
+      summary: Elias
+      description: Sample Unit Elias
+      value:
+        Name: Elias
+        ID: YV6x7P
+        Attributes:
+          Category: Ganger
+          Type: Cawdor Brethren
+          XP: 0
+    UnitEliasBody:
+      summary: Elias
+      description: Sample Unit Elias, as used in request bodies
+      value:
+        Name: Elias
+        Attributes:
+          Category: Ganger
+          Type: Cawdor Brethren
+    UnitSnood:
+      summary: Snood
+      description: Sample Unit Snood the Lesser
+      value:
+        ID: ILXEgB
+        Name: Snood the Lesser
+        Attributes:
+          Category: Juve
+          Type: Bonepicker
+          XP: 1
+    UnitSnoodBody:
+      summary: Snood
+      description: Sample Unit Snood the Lesser
+      value:
+        Name: Snood the Lesser
+        Attributes:
+          Category: Juve
+          Type: Bonepicker
+          XP: 1
