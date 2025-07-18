@@ -1,4 +1,4 @@
-openapi: 3.1.1
+openapi: 3.0.3
 info:
   title: Necrochronicle OpenAPI specification
   description: Specification of the Necrochronicle API
@@ -7,6 +7,336 @@ info:
     url: https://www.gnu.org/licenses/gpl-3.0.txt
   version: 0.1.0
 paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: List Users
+      operationId: listUser
+      parameters:
+        - in: query
+          name: Username
+          schema:
+            $ref: '#/components/schemas/UserUsername'
+      responses:
+        "200": # OK
+          description: A list of Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Users
+      summary: Create a new User
+      operationId: createUser
+      requestBody:
+        description: Properties for the new User
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - required:
+                    - Username
+                    - Email
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created User
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the UserID in this link 
+                example: '/Users/e6ymQY'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              # TODO: add example
+              # examples:
+  /users/{UserID}:
+    parameters:
+      - $ref: '#/components/parameters/pathUserID'
+    get:
+      tags:
+        - Users
+      summary: Retrieve a specific User
+      operationId: retrieveUser
+      responses:
+        "200": # OK
+          description: The requested User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Users
+      summary: Update a User
+      operationId: updateUser
+      requestBody:
+        description: Properties to update for the User
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Users
+      summary: Delete a User
+      operationId: deleteUser
+      responses:
+        "204": # No Content
+          description: Deletion successful for the User
+  /campaigns:
+    get:
+      tags:
+        - Campaigns
+      summary: List Campaigns
+      operationId: listCampaign
+      parameters:
+        - in: query
+          name: Name
+          schema:
+            $ref: '#/components/schemas/CampaignName'
+        - in: query
+          name: Status
+          schema:
+            $ref: '#/components/schemas/CampaignStatus'
+      responses:
+        "200": # OK
+          description: A list of Factions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Campaigns
+      summary: Create a new Campaign
+      operationId: createCampaign
+      requestBody:
+        description: Properties for the new Campaign
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Campaign'
+                - required:
+                    - Name
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created Campaign
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the CampaignID in this link 
+                example: '/campaigns/e6ymQY'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+              # TODO: add example
+              # examples:
+  /campaigns/{CampaignID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+    get:
+      tags:
+        - Campaigns
+      summary: Retrieve a specific Campaign
+      operationId: retrieveCampaign
+      responses:
+        "200": # OK
+          description: The requested Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Campaigns
+      summary: Update a Campaign
+      operationId: updateCampaign
+      requestBody:
+        description: Properties to update for the Campaign
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Campaigns
+      summary: Delete a Campaign
+      operationId: deleteCampaign
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Campaign
+  /campaigns/{CampaignID}/factions:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+    get:
+      tags:
+        - Factions
+      summary: List Factions
+      operationId: listFaction
+      parameters:
+        - in: query
+          name: Name
+          schema:
+            $ref: '#/components/schemas/FactionName'
+      responses:
+        "200": # OK
+          description: A list of Factions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Faction'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Factions
+      summary: Create a new Faction
+      operationId: createFaction
+      requestBody:
+        description: Properties for the new Faction
+        required: true
+        content:
+          application/json:
+            schema: # Unable to use the Faction schema due to mutability of UserID
+              type: object
+              properties:
+                UserID:
+                  type: string
+                Name:
+                  $ref: '#/components/schemas/FactionName'
+                Attributes:
+                  type: object
+                  additionalProperties: true
+              required:
+                - UserID
+                - Name
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created Faction
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the FactionID in this link 
+                example: '/campaigns/e6ymQY/factions/C8BqwB'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faction'
+              # TODO: add example
+              # examples:
+  /campaigns/{CampaignID}/factions/{FactionID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathFactionID'
+    get:
+      tags:
+        - Factions
+      summary: Retrieve a specific Faction
+      operationId: retrieveFaction
+      responses:
+        "200": # OK
+          description: The requested Faction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faction'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Factions
+      summary: Update a Faction
+      operationId: updateFaction
+      requestBody:
+        description: Properties to update for the Faction
+        required: true
+        content:
+          application/json:
+            schema: # Unable to use the Faction schema due to mutability of UserID
+              type: object
+              properties:
+                UserID:
+                  type: string
+                Name:
+                  $ref: '#/components/schemas/FactionName'
+                Attributes:
+                  type: object
+                  additionalProperties: true
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated Faction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faction'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Factions
+      summary: Delete a Faction
+      operationId: deleteFaction
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Faction
   /campaigns/{CampaignID}/factions/{FactionID}/equipment:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
@@ -21,6 +351,10 @@ paths:
           name: Name
           schema:
             $ref: '#/components/schemas/EquipmentName'
+        - in: query
+          name: OwnerUnitID
+          schema:
+            $ref: '#/components/schemas/UnitID'
       responses:
         "200": # OK
           description: A list of Equipment
@@ -30,7 +364,7 @@ paths:
                 type: array
                 items: 
                   $ref: '#/components/schemas/Equipment'
-              # TODO
+              # TODO: add example
               # example:
     post:
       tags:
@@ -42,12 +376,19 @@ paths:
         required: true
         content:
           application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/Equipment'
-                - required:
-                  - Name
-            # TODO
+            schema: # Unable to use Equipment schema due to mutability of UnitID
+              type: object
+              properties:
+                OwnerUnitID:
+                  type: string
+                Name:
+                  type: string
+                Attributes:
+                  type: object
+                  additionalProperties: true
+              required:
+                - Name
+            # TODO: add example
             # examples:
       responses:
         "201": # Created
@@ -62,8 +403,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Equipment'
-              # TODO
+              # TODO: add example
               # examples:
+  /campaigns/{CampaignID}/factions/{FactionID}/equipment/{EquipmentID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathEquipmentID'
+      - $ref: '#/components/parameters/pathFactionID'
+    get:
+      tags:
+        - Equipment
+      summary: Retrieve a specific Equipment
+      operationId: retrieveEquipment
+      responses:
+        "200": # OK
+          description: The requested Equipment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Equipment
+      summary: Update a specific Equipment
+      operationId: updateEquipment
+      requestBody:
+        description: Properties to update for the Equipment
+        required: true
+        content:
+          application/json:
+            schema: # Unable to use Equipment schema due to mutability of UnitID
+              type: object
+              properties:
+                OwnerUnitID:
+                  type: string
+                Name:
+                  type: string
+                Attributes:
+                  type: object
+                  additionalProperties: true
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated Equipment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Equipment
+      summary: Delete an Equipment
+      operationId: deleteEquipment
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Equipment
   /campaigns/{CampaignID}/factions/{FactionID}/units:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
@@ -141,7 +540,6 @@ paths:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathFactionID'
       - $ref: '#/components/parameters/pathUnitID'
-    
     get:
       tags:
         - Units
@@ -190,111 +588,120 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Unit
-  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}/equipment:
+  /campaigns/{CampaignID}/users:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
-      - $ref: '#/components/parameters/pathFactionID'
-      - $ref: '#/components/parameters/pathUnitID'
     get:
       tags:
-        - Units
-      summary: List this Unit's Equipment
-      operationId: listUnitEqipmentAssoc
+        - Campaigns
+      summary: List this Campaigns's <-> User associations
+      operationId: listCampaignUserAssoc
       parameters:
         - in: query
-          name: Name
+          name: CampaignRoleName
           schema:
-            $ref: '#/components/schemas/EquipmentName'
+            $ref: '#/components/schemas/CampaignRoleName'
+        - in: query
+          name: UserUsername
+          schema:
+            $ref: '#/components/schemas/UserUsername'
       responses:
         "200": # OK
-          description: A list of this Unit's Equipment
+          description: A list of this Campaign's <-> User associations
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Equipment'
-              # TODO
+                  $ref: '#/components/schemas/CampaignUserAssoc'
+              # TODO: add example
               # example:
-  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}/equipment/{EquipmentID}:
-    parameters:
-      - $ref: '#/components/parameters/pathCampaignID'
-      - $ref: '#/components/parameters/pathFactionID'
-      - $ref: '#/components/parameters/pathUnitID'
-      - $ref: '#/components/parameters/pathEquipmentID'
-    put:
+    post:
       tags:
-        - Units
-      summary: Create a new Unit <- Equipment association
-      operationId: createUnitEquipmentAssoc
-      requestBody: 
-        description: Properties for the new Unit <- Equipment association
+        - Campaigns
+      summary: Create a new Campaign <-> User association
+      operationId: createCampaignUserAssoc
+      requestBody:
+        description: Properties for the new Campaign <-> User association
         required: true
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/UnitEquipmentAssoc'
-            # TODO
+            schema: # Unable to use the CampaignUserAssoc schema due to mutability of UserID
+              type: object
+              properties:
+                UserID:
+                  type: string
+                CampaignRoleID:
+                  $ref: '#/components/schemas/CampaignRoleID'
+              required:
+                - UserID
+                - CampaignRoleID
+            # TODO: add example
             # examples:
       responses:
         "201": # Created
-          description: Details of the newly-created Unit <- Equipment association
+          description: Details of the newly-created Campaign <-> User association
           headers:
             Location:
               schema:
                 type: string
-                example: /campaigns/e6ymQY/factions/C8BqwB/Units/ILXEgB/equipment/1Ejv04
+                # TODO: fix UserID in this link 
+                example: /campaigns/e6ymQY/users/C8BqwB/
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnitEquipmentAssoc'
-              # TODO
+                $ref: '#/components/schemas/CampaignUserAssoc'
+              # TODO: add example
               # examples:
+  /campaigns/{CampaignID}/users/{UserID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathUserID'
     get:
       tags:
-        - Units
-      summary: Retrieve a specific Unit <- Equipment association
-      operationId: retrieveUnitEquipmentAssoc
+        - Campaigns
+      summary: Retrieve a specific Campaign <-> User association
+      operationId: retrieveCampaignUserAssoc
       responses:
         "200": # OK
-          description: The requested Unit <- Equipment association
+          description: The requested Campaign <-> User association
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnitEquipmentAssoc'
-              # TODO
+                $ref: '#/components/schemas/CampaignUserAssoc'
+              # TODO: add example
               # examples:
     patch:
       tags:
-        - Units
-      summary: Update a Unit <- Equipment association
-      operationId: updateUnitEquipmentAssoc
-      requestBody: 
-        description: Properties for the Unit <- Equipment association
+        - Campaigns
+      summary: Update a Campaign <-> User association
+      operationId: updateCampaignUserAssoc
+      requestBody:
+        description: Properties for the Campaign <-> User association
         required: true
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/UnitEquipmentAssoc'
-            # TODO
+            schema:
+              $ref: '#/components/schemas/CampaignUserAssoc'
+            # TODO: add example
             # examples:
       responses:
         "200": # OK
-          description: Details of the updated Unit <- Equipment association
+          description: Details of the updated Campaign <-> User association
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnitEquipmentAssoc'
-              # TODO
+                $ref: '#/components/schemas/CampaignUserAssoc'
+              # TODO: add example
               # examples:
     delete:
       tags:
-        - Units
-      summary: Delete a Unit <- Equipment association
-      operationId: deleteUnitEquipmentAssoc
+        - Campaigns
+      summary: Delete a Campaign <-> User association
+      operationId: deleteCampaignUserAssoc
       responses:
         "204": # No Content
-          description: Deletion successful for the Unit <- Equipment association
+          description: Deletion successful for the Campaign <-> User association
 components:
   links:
     retrieveUnit:
@@ -329,16 +736,82 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/UnitID'
+    pathUserID:
+      in: path
+      name: UserID
+      required: true
+      schema:
+        $ref: '#/components/schemas/UserID'
   schemas:
+    Campaign:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/CampaignID'
+        Status:
+          $ref: '#/components/schemas/CampaignStatus'
+        Name: 
+          $ref: '#/components/schemas/CampaignName'
+        Attributes:
+          type: object
+          additionalProperties: true
+      required: 
+        - ID
     CampaignID:
       type: string
       readOnly: true
       example: e6ymQY
+    CampaignName:
+      type: string
+      example: Foolish Fracas
+    CampaignRole:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/CampaignRoleID'
+        Name:
+          $ref: '#/components/schemas/CampaignRoleName'
+      required:
+        - ID
+        - Name
+    CampaignRoleID:
+      type: string
+      example: 94lJHE
+    CampaignRoleName:
+      type: string
+      enum:
+        - arbiter
+        - player
+        - observer
+      example: player
+    CampaignStatus:
+      type: string
+      enum:
+        - draft
+        - open
+        - ongoing
+        - finished
+      example: ongoing
+    CampaignUserAssoc:
+      type: object
+      properties:
+        CampaignID:
+          $ref: '#/components/schemas/CampaignID'
+        UserID:
+          $ref: '#/components/schemas/UserID'
+        CampaignRoleID:
+          $ref: '#/components/schemas/CampaignRoleID'
+      required:
+        - CampaignID
+        - UserID
+        - CampaignRoleID
     Equipment:
       type: object
       properties:
         ID:
           $ref: '#/components/schemas/EquipmentID'
+        OwnerUnitID:
+          $ref: '#/components/schemas/UnitID'
         Name:
           $ref: '#/components/schemas/EquipmentName'
         Attributes:
@@ -353,10 +826,29 @@ components:
     EquipmentName:
       type: string
       example: Stub gun
+    Faction:
+      type: object
+      properties: 
+        ID:
+          $ref: '#/components/schemas/FactionID'
+        CampaignID:
+          $ref: '#/components/schemas/CampaignID'
+        UserID:
+          $ref: '#/components/schemas/UserID'
+        Name:
+          $ref: '#/components/schemas/FactionName'
+        Attributes:
+          type: object
+          additionalProperties: true
+      required:
+        - ID
     FactionID:
       type: string
       readOnly: true
       example: C8BqwB
+    FactionName:
+      type: string
+      example: The Bonespire Vigil
     Unit:
       type: object
       properties:
@@ -369,15 +861,6 @@ components:
           additionalProperties: true
       required:
         - ID
-    UnitEquipmentAssoc:
-      type: object
-      properties:
-        UnitID:
-          $ref: '#/components/schemas/UnitID'
-        EquipmentID:
-          $ref: '#/components/schemas/EquipmentID'
-        Quantity:
-          type: integer
     UnitID:
       type: string
       readOnly: true
@@ -385,20 +868,42 @@ components:
     UnitName:
       type: string
       example: Snood the lesser
+    User:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/UserID'
+        Username:
+          $ref: '#/components/schemas/UserUsername'
+        Email:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+      required: 
+        - ID
+    UserID:
+      type: string
+      readOnly: true
+      example: hImv4y
+    UserUsername:
+      type: string
+      example: burgermaster
   examples:
     UnitElias:
       summary: Elias
       description: Sample Unit Elias
       value:
-        Name: Elias
         ID: YV6x7P
+        Name: Elias
         Attributes:
           Category: Ganger
           Type: Cawdor Brethren
           XP: 0
     UnitEliasBody:
       summary: Elias
-      description: Sample Unit Elias, as used in request bodies
+      description: Sample Unit Elias
       value:
         Name: Elias
         Attributes:
