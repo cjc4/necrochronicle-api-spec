@@ -55,7 +55,7 @@ paths:
               schema:
                 type: string
                 # TODO: fix the UserID in this link 
-                example: '/Users/e6ymQY'
+                example: '/users/e6ymQY'
           content:
             application/json:
               schema:
@@ -69,7 +69,7 @@ paths:
       tags:
         - Users
       summary: Retrieve a specific User
-      operationId: retrieveUser
+      operationId: retrieveUserByID
       responses:
         "200": # OK
           description: The requested User
@@ -110,6 +110,116 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the User
+  /users/{UserID}/contact-info:
+    parameters:
+      - $ref: '#/components/parameters/pathUserID'
+    get:
+      tags:
+        - Contact Info
+      summary: List this user's ContactInfo
+      operationId: ListContactInfo
+      responses:
+        "200": # OK
+          description: A list of ContactInfo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactInfo'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Contact Info
+      summary: Create a new ContactInfo
+      operationId: createContactInfo
+      requestBody:
+        description: Properties for the new ContactInfo
+        required: true
+        content:
+          application/json:
+            schema: # Not using ContactInfo schema here to customize property visibility
+              type: object
+              properties:
+                Service:
+                  type: string
+                Value:
+                  type: string
+              required:
+                - Service
+                - Value
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created ContactInfo
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the UserID & ContactInfoID in this link 
+                example: '/users/e6ymQY/contact-info/dtuc45'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInfo'
+              # TODO: add example
+              # examples:
+  /users/{UserID}/contact-info/{ContactInfoID}:
+    parameters:
+      - $ref: '#/components/parameters/pathUserID'
+      - $ref: '#/components/parameters/pathContactInfoID'
+    get:
+      tags:
+        - Contact Info
+      summary: Retrieve a specific ContactInfo
+      operationId: retrieveContactInfoByID
+      responses:
+        "200": # OK
+          description: The requested ContactInfo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInfo'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Contact Info
+      summary: Update a ContactInfo
+      operationId: updateContactInfo
+      requestBody:
+        description: Properties to update for the ContactInfo
+        required: true
+        content:
+          application/json:
+            schema: # Not using ContactInfo schema here to customize property visibility
+              type: object
+              properties:
+                Service:
+                  type: string
+                Value:
+                  type: string
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated ContactInfo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInfo'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Contact Info
+      summary: Delete a ContactInfo
+      operationId: deleteContactInfo
+      responses:
+        "204": # No Content
+          description: Deletion successful for the ContactInfo
   /campaigns:
     get:
       tags:
@@ -177,7 +287,7 @@ paths:
       tags:
         - Campaigns
       summary: Retrieve a specific Campaign
-      operationId: retrieveCampaign
+      operationId: retrieveCampaignByID
       responses:
         "200": # OK
           description: The requested Campaign
@@ -396,7 +506,7 @@ paths:
       tags:
         - Factions
       summary: Retrieve a specific Faction
-      operationId: retrieveFaction
+      operationId: retrieveFactionByID
       responses:
         "200": # OK
           description: The requested Faction
@@ -500,7 +610,7 @@ paths:
             Location:
               schema:
                 type: string
-                example: "/campaigns/e6ymQY/factions/C8BqwB/Units/YV6x7P"
+                example: "/campaigns/e6ymQY/factions/C8BqwB/units/YV6x7P"
           content:
             application/json:
               schema:
@@ -509,8 +619,8 @@ paths:
                 Elias:
                   $ref: '#/components/examples/UnitElias'
           links:
-            retrieveUnit:
-              $ref: '#/components/links/retrieveUnit'
+            retrieveUnitByID:
+              $ref: '#/components/links/retrieveUnitByID'
   /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
@@ -520,7 +630,7 @@ paths:
       tags:
         - Units
       summary: Retrieve a specific Unit
-      operationId: retrieveUnit
+      operationId: retrieveUnitByID
       responses:
         "200": # OK
           description: The requested Unit
@@ -620,7 +730,7 @@ paths:
               schema:
                 type: string
                 # TODO: fix the EquipmentID in this example
-                example: "/campaigns/e6ymQY/factions/C8BqwB/Equipment/1Ejv04"
+                example: "/campaigns/e6ymQY/factions/C8BqwB/equipment/1Ejv04"
           content:
             application/json:
               schema:
@@ -636,7 +746,7 @@ paths:
       tags:
         - Equipment
       summary: Retrieve a specific Equipment
-      operationId: retrieveEquipment
+      operationId: retrieveEquipmentByID
       responses:
         "200": # OK
           description: The requested Equipment
@@ -679,11 +789,11 @@ paths:
           description: Deletion successful for the Equipment
 components:
   links:
-    retrieveUnit:
+    retrieveUnitByID:
       description: >
         The `ID` value returned in the response can be used as the
         `UnitID` parameter in `GET /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}`.
-      operationId: retrieveUnit
+      operationId: retrieveUnitByID
       parameters:
         UnitID: '$response.body#/ID'
   parameters:
@@ -693,6 +803,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/CampaignID'
+    pathContactInfoID:
+      in: path
+      name: ContactInfoID
+      required: true
+      schema:
+        $ref: '#/components/schemas/ContactInfoID'
     pathEquipmentID:
       in: path
       name: EquipmentID
@@ -780,6 +896,24 @@ components:
         - CampaignID
         - UserID
         - CampaignRoleID
+    ContactInfo:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/ID'
+        UserID:
+          $ref: '#/components/schemas/UserID'
+        Service:
+          type: string
+          example: Discord
+        Value:
+          type: string
+          example: burgermaster42
+      required:
+        - ID
+    ContactInfoID:
+      type: string
+      example: QAqz0a
     Equipment:
       type: object
       properties:
