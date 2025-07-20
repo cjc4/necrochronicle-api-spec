@@ -393,7 +393,7 @@ paths:
       tags:
         - Campaigns
       summary: Retrieve a specific Campaign <-> User association
-      operationId: retrieveCampaignUserAssoc
+      operationId: retrieveCampaignUserAssocByIDs
       responses:
         "200": # OK
           description: The requested Campaign <-> User association
@@ -436,6 +436,191 @@ paths:
         - Campaigns
       summary: Delete a Campaign <-> User association
       operationId: deleteCampaignUserAssoc
+      responses:
+        "204": # No Content
+          description: Deletion successful for the Campaign <-> User association
+  /campaigns/{CampaignID}/events:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+    get:
+      tags:
+        - Campaign Events
+      summary: List CampaignEvents
+      operationId: listCampaignEvent
+      parameters:
+        # TODO: Figure out how to support querying date ranges
+        - in: query
+          name: Type
+          schema:
+            $ref: '#/components/schemas/CampaignEvent/properties/Type'
+          # TODO: add example
+          # examples:
+      responses:
+        "200": # OK
+          description: A list of CampaignEvents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignEvent'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Campaign Events
+      summary: Create a new CampaignEvent
+      operationId: createCampaignEvent
+      requestBody:
+        description: Properties for the new CampaignEvent
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CampaignEvent'
+                - required:
+                  - OccurredAt
+                  - Type
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created CampaignEvent
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix the CampaignEventID in this link 
+                example: '/campaigns/e6ymQY/events/C8BqwB'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignEvent'
+              # TODO: add example
+              # examples:
+  /campaigns/{CampaignID}/events/{CampaignEventID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathCampaignEventID'
+    get:
+      tags:
+        - Campaign Events
+      summary: Retrieve a specific CampaignEvent
+      operationId: retrieveCampaignEventByID
+      responses:
+        "200": # OK
+          description: The requested CampaignEvent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignEvent'
+              # TODO: add example
+              # examples:
+    patch:
+      tags:
+        - Campaign Events
+      summary: Update a CampaignEvent
+      operationId: updateCampaignEvent
+      requestBody:
+        description: Properties to update for the CampaignEvent
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignEvent'
+            # TODO: add example
+            # examples:
+      responses:
+        "200": # OK
+          description: The updated CampaignEvent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignEvent'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Campaign Events
+      summary: Delete a CampaignEvent
+      operationId: deleteCampaignEvent
+      responses:
+        "204": # No Content
+          description: Deletion successful for the CampaignEvent
+  /campaigns/{CampaignID}/events/{CampaignEventID}/factions:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathCampaignEventID'
+    get:
+      tags:
+        - Campaign Events
+      summary: List this CampaignEvent's <-> Faction associations
+      operationId: listCampaignEventFactionAssoc
+      responses:
+        "200": # OK
+          description: A list of this CampaignEvent's <-> Faction associations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignEventFactionAssoc'
+              # TODO: add example
+              # example:
+    post:
+      tags:
+        - Campaign Events
+      summary: Create a new CampaignEvent <-> Faction association
+      operationId: createCampaignEventFactionAssoc
+      requestBody:
+        description: Properties for the new CampaignEvent <-> Faction association
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignEventFactionAssoc'
+            # TODO: add example
+            # examples:
+      responses:
+        "201": # Created
+          description: Details of the newly-created CampaignEvent <-> Faction association
+          headers:
+            Location:
+              schema:
+                type: string
+                # TODO: fix CampaignEventID in this link 
+                example: /campaigns/e6ymQY/events/C8BqwB/factions/C8BqwB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignEventFactionAssoc'
+              # TODO: add example
+              # examples:
+  /campaigns/{CampaignID}/events/{CampaignEventID}/factions/{FactionID}:
+    parameters:
+      - $ref: '#/components/parameters/pathCampaignID'
+      - $ref: '#/components/parameters/pathCampaignEventID'
+      - $ref: '#/components/parameters/pathFactionID'
+    get:
+      tags:
+        - Campaign Events
+      summary: Retrieve a specific CampaignEvent <-> Faction association
+      operationId: retrieveCampaignEventFactionAssocByIDs
+      responses:
+        "200": # OK
+          description: The requested CampaignEvent <-> Faction association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignEventFactionAssoc'
+              # TODO: add example
+              # examples:
+    delete:
+      tags:
+        - Campaign Events
+      summary: Delete a Campaign <-> User association
+      operationId: deleteCampaignEventFactionAssoc
       responses:
         "204": # No Content
           description: Deletion successful for the Campaign <-> User association
@@ -803,6 +988,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/CampaignID'
+    pathCampaignEventID:
+      in: path
+      name: CampaignEventID
+      required: true
+      schema:
+        $ref: '#/components/schemas/CampaignEventID'
     pathContactInfoID:
       in: path
       name: ContactInfoID
@@ -850,6 +1041,38 @@ components:
           $ref: '#/components/schemas/Attributes'
       required: 
         - ID
+    CampaignEvent:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/ID'
+        CampaignID:
+          $ref: '#/components/schemas/CampaignID'
+        OccurredAt:
+          type: string
+          format: date-time
+        Type:
+          type: string
+          example: battle
+        Details:
+          type: object
+          additionalProperties: true
+      required:
+        - ID
+    CampaignEventFactionAssoc:
+      type: object
+      properties:
+        CampaignID:
+          $ref: '#/components/schemas/CampaignID'
+        FactionID:
+          $ref: '#/components/schemas/FactionID'
+      required:
+        - CampaignID
+        - FactionID
+    CampaignEventID:
+      type: string
+      readOnly: true
+      example: AuVRJM
     CampaignID:
       type: string
       readOnly: true
@@ -976,6 +1199,7 @@ components:
           $ref: '#/components/schemas/UserUsername'
         Email:
           type: string
+          format: email
         FirstName:
           type: string
         LastName:
