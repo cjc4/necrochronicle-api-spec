@@ -15,9 +15,9 @@ paths:
       operationId: listUser
       parameters:
         - in: query
-          name: Username
+          name: username
           schema:
-            $ref: '#/components/schemas/User/properties/Username'
+            $ref: '#/components/schemas/User/properties/username'
       responses:
         "200": # OK
           description: A list of Users
@@ -43,8 +43,8 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/User'
                 - required:
-                    - Username
-                    - Email
+                    - username
+                    - email
             # TODO: add example
             # examples:
       responses:
@@ -62,7 +62,7 @@ paths:
                 $ref: '#/components/schemas/User'
               # TODO: add example
               # examples:
-  /users/{UserID}:
+  /users/{userID}:
     parameters:
       - $ref: '#/components/parameters/pathUserID'
     get:
@@ -110,7 +110,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the User
-  /users/{UserID}/contact-info:
+  /users/{userID}/contact-info:
     parameters:
       - $ref: '#/components/parameters/pathUserID'
     get:
@@ -120,9 +120,9 @@ paths:
       operationId: ListContactInfo
       parameters:
         - in: query
-          name: Service
+          name: service
           schema:
-            $ref: '#/components/schemas/ContactInfo/properties/Service'
+            $ref: '#/components/schemas/ContactInfo/properties/service'
       responses:
         "200": # OK
           description: A list of ContactInfo
@@ -147,13 +147,13 @@ paths:
             schema: # Not using ContactInfo schema here to customize property visibility
               type: object
               properties:
-                Service:
-                  $ref: '#/components/schemas/ContactInfo/properties/Service'
-                Value:
-                  $ref: '#/components/schemas/ContactInfo/properties/Value'
+                service:
+                  $ref: '#/components/schemas/ContactInfo/properties/service'
+                value:
+                  $ref: '#/components/schemas/ContactInfo/properties/value'
               required:
-                - Service
-                - Value
+                - service
+                - value
             # TODO: add example
             # examples:
       responses:
@@ -171,7 +171,7 @@ paths:
                 $ref: '#/components/schemas/ContactInfo'
               # TODO: add example
               # examples:
-  /users/{UserID}/contact-info/{ContactInfoID}:
+  /users/{userID}/contact-info/{contactInfoID}:
     parameters:
       - $ref: '#/components/parameters/pathUserID'
       - $ref: '#/components/parameters/pathContactInfoID'
@@ -202,10 +202,10 @@ paths:
             schema: # Not using ContactInfo schema here to customize property visibility
               type: object
               properties:
-                Service:
-                  $ref: '#/components/schemas/ContactInfo/properties/Service'
-                Value:
-                  $ref: '#/components/schemas/ContactInfo/properties/Value'
+                service:
+                  $ref: '#/components/schemas/ContactInfo/properties/service'
+                value:
+                  $ref: '#/components/schemas/ContactInfo/properties/value'
             # TODO: add example
             # examples:
       responses:
@@ -233,18 +233,18 @@ paths:
       operationId: listCampaign
       parameters:
         - in: query
-          name: Name
+          name: name
           schema:
-            $ref: '#/components/schemas/Campaign/properties/Name'
+            $ref: '#/components/schemas/Campaign/properties/name'
           # TODO: add example
           # examples:
         - in: query
-          name: Status
+          name: status
           schema:
-            $ref: '#/components/schemas/Campaign/properties/Status'
+            $ref: '#/components/schemas/Campaign/properties/status'
       responses:
         "200": # OK
-          description: A list of Factions
+          description: A list of Campaigns
           content:
             application/json:
               schema:
@@ -267,7 +267,7 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/Campaign'
                 - required:
-                    - Name
+                    - name
             # TODO: add example
             # examples:
       responses:
@@ -285,7 +285,7 @@ paths:
                 $ref: '#/components/schemas/Campaign'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}:
+  /campaigns/{campaignID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
     get:
@@ -333,7 +333,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Campaign
-  /campaigns/{CampaignID}/users:
+  /campaigns/{campaignID}/users:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
     get:
@@ -343,13 +343,13 @@ paths:
       operationId: listCampaignUserAssoc
       parameters:
         - in: query
-          name: CampaignRoleName
+          name: campaignRoleName
           schema:
-            $ref: '#/components/schemas/CampaignRole/properties/Name'
+            $ref: '#/components/schemas/CampaignRole/properties/name'
         - in: query
-          name: UserUsername
+          name: username
           schema:
-            $ref: '#/components/schemas/User/properties/Username'
+            $ref: '#/components/schemas/User/properties/username'
       responses:
         "200": # OK
           description: A list of this Campaign's <-> User associations
@@ -390,7 +390,7 @@ paths:
                 $ref: '#/components/schemas/CampaignUserAssoc'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}/users/{UserID}:
+  /campaigns/{campaignID}/users/{userID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathUserID'
@@ -421,10 +421,10 @@ paths:
             schema: # Not using CampaignUserAssoc schema here to customize property visibility
               type: object
               properties:
-                CampaignRoleID:
+                campaignRoleID:
                   $ref: '#/components/schemas/CampaignRoleID'
               required:
-                - CampaignRoleID
+                - campaignRoleID
             # TODO: add example
             # examples:
       responses:
@@ -444,7 +444,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Campaign <-> User association
-  /campaigns/{CampaignID}/events:
+  /campaigns/{campaignID}/events:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
     get:
@@ -455,9 +455,9 @@ paths:
       parameters:
         # TODO: Figure out how to support querying date ranges
         - in: query
-          name: Type
+          name: type
           schema:
-            $ref: '#/components/schemas/CampaignEvent/properties/Type'
+            $ref: '#/components/schemas/CampaignEvent/properties/type'
           # TODO: add example
           # examples:
       responses:
@@ -485,8 +485,8 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/CampaignEvent'
                 - required:
-                  - OccurredAt
-                  - Type
+                  - occurredAt
+                  - type
             # TODO: add example
             # examples:
       responses:
@@ -504,7 +504,7 @@ paths:
                 $ref: '#/components/schemas/CampaignEvent'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}/events/{CampaignEventID}:
+  /campaigns/{campaignID}/events/{campaignEventID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathCampaignEventID'
@@ -553,7 +553,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the CampaignEvent
-  /campaigns/{CampaignID}/events/{CampaignEventID}/factions:
+  /campaigns/{campaignID}/events/{campaignEventID}/factions:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathCampaignEventID'
@@ -602,7 +602,7 @@ paths:
                 $ref: '#/components/schemas/CampaignEventFactionAssoc'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}/events/{CampaignEventID}/factions/{FactionID}:
+  /campaigns/{campaignID}/events/{campaignEventID}/factions/{factionID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathCampaignEventID'
@@ -629,9 +629,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Campaign <-> User association
-  /campaigns/{CampaignID}/factions:
-    parameters:
-      - $ref: '#/components/parameters/pathCampaignID'
+  /factions:
     get:
       tags:
         - Factions
@@ -639,9 +637,9 @@ paths:
       operationId: listFaction
       parameters:
         - in: query
-          name: Name
+          name: name
           schema:
-            $ref: '#/components/schemas/Faction/properties/Name'
+            $ref: '#/components/schemas/Faction/properties/name'
           # TODO: add example
           # examples:
       responses:
@@ -669,8 +667,8 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/Faction'
                 - required:
-                  - UserID
-                  - Name
+                  - userID
+                  - name
             # TODO: add example
             # examples:
       responses:
@@ -688,9 +686,8 @@ paths:
                 $ref: '#/components/schemas/Faction'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}/factions/{FactionID}:
+  /factions/{factionID}:
     parameters:
-      - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathFactionID'
     get:
       tags:
@@ -737,9 +734,8 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Faction
-  /campaigns/{CampaignID}/factions/{FactionID}/units:
+  /factions/{factionID}/units:
     parameters:
-      - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathFactionID'
     get:
       tags:
@@ -748,9 +744,9 @@ paths:
       operationId: listUnit
       parameters:
         - in: query
-          name: Name
+          name: name
           schema:
-            $ref: '#/components/schemas/Unit/properties/Name'
+            $ref: '#/components/schemas/Unit/properties/name'
           # TODO: add example
           # examples:
       responses:
@@ -763,18 +759,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/Unit'
               example:
-                - ID: ILXEgB
-                  Name: Snood the Lesser
-                  Attributes:
-                    Category: Juve
-                    Type: Bonepicker
-                    XP: 1
-                - ID: UYWpOW
-                  Name: Hauberk "Heavy-hand"
-                  Attributes:
-                    Category: Leader
-                    Type: Cawdor Word-Keeper
-                    XP: 7
+                - id: ILXEgB
+                  name: Snood the Lesser
+                  attributes:
+                    category: Juve
+                    type: Bonepicker
+                    xp: 1
+                - id: UYWpOW
+                  name: Hauberk "Heavy-hand"
+                  attributes:
+                    category: Leader
+                    type: Cawdor Word-Keeper
+                    xp: 7
     post:
       tags:
         - Units
@@ -789,7 +785,7 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/Unit'
                 - required:
-                  - Name
+                  - name
             examples:
               Elias:
                 $ref: '#/components/examples/UnitEliasBody'
@@ -811,9 +807,8 @@ paths:
           links:
             retrieveUnitByID:
               $ref: '#/components/links/retrieveUnitByID'
-  /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}:
+  /factions/{factionID}/units/{unitID}:
     parameters:
-      - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathFactionID'
       - $ref: '#/components/parameters/pathUnitID'
     get:
@@ -864,7 +859,7 @@ paths:
       responses:
         "204": # No Content
           description: Deletion successful for the Unit
-  /campaigns/{CampaignID}/factions/{FactionID}/equipment:
+  /factions/{factionID}/equipment:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathFactionID'
@@ -875,15 +870,15 @@ paths:
       operationId: listEquipment
       parameters:
         - in: query
-          name: Name
+          name: name
           schema:
-            $ref: '#/components/schemas/Equipment/properties/Name'
+            $ref: '#/components/schemas/Equipment/properties/name'
           # TODO: add example
           # examples:
         - in: query
-          name: OwnerUnitID
+          name: ownerUnitID
           schema:
-            $ref: '#/components/schemas/Equipment/properties/OwnerUnitID'
+            $ref: '#/components/schemas/Equipment/properties/ownerUnitID'
       responses:
         "200": # OK
           description: A list of Equipment
@@ -909,7 +904,7 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/Equipment'
                 - required:
-                  - Name
+                  - name
             # TODO: add example
             # examples:
       responses:
@@ -927,7 +922,7 @@ paths:
                 $ref: '#/components/schemas/Equipment'
               # TODO: add example
               # examples:
-  /campaigns/{CampaignID}/factions/{FactionID}/equipment/{EquipmentID}:
+  /factions/{factionID}/equipment/{equipmentID}:
     parameters:
       - $ref: '#/components/parameters/pathCampaignID'
       - $ref: '#/components/parameters/pathEquipmentID'
@@ -982,50 +977,50 @@ components:
     retrieveUnitByID:
       description: >
         The `ID` value returned in the response can be used as the
-        `UnitID` parameter in `GET /campaigns/{CampaignID}/factions/{FactionID}/units/{UnitID}`.
+        `UnitID` parameter in `GET /factions/{FactionID}/units/{UnitID}`.
       operationId: retrieveUnitByID
       parameters:
-        UnitID: '$response.body#/ID'
+        UnitID: '$response.body#/id'
   parameters:
     pathCampaignID:
       in: path
-      name: CampaignID
+      name: campaignID
       required: true
       schema:
         $ref: '#/components/schemas/CampaignID'
     pathCampaignEventID:
       in: path
-      name: CampaignEventID
+      name: campaignEventID
       required: true
       schema:
         $ref: '#/components/schemas/CampaignEventID'
     pathContactInfoID:
       in: path
-      name: ContactInfoID
+      name: contactInfoID
       required: true
       schema:
         $ref: '#/components/schemas/ContactInfoID'
     pathEquipmentID:
       in: path
-      name: EquipmentID
+      name: equipmentID
       required: true
       schema:
         $ref: '#/components/schemas/EquipmentID'
     pathFactionID:
       in: path
-      name: FactionID
+      name: factionID
       required: true
       schema:
         $ref: '#/components/schemas/FactionID'
     pathUnitID:
       in: path
-      name: UnitID
+      name: unitID
       required: true
       schema:
         $ref: '#/components/schemas/UnitID'
     pathUserID:
       in: path
-      name: UserID
+      name: userID
       required: true
       schema:
         $ref: '#/components/schemas/UserID'
@@ -1036,9 +1031,9 @@ components:
     Campaign:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        Status:
+        status:
           type: string
           enum:
             - draft
@@ -1046,40 +1041,39 @@ components:
             - ongoing
             - finished
           example: ongoing
-        Name: 
+        name: 
           $ref: '#/components/schemas/Name'
-        Attributes:
+        attributes:
           $ref: '#/components/schemas/Attributes'
       required: 
-        - ID
+        - id
     CampaignEvent:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        CampaignID:
+        campaignID:
           $ref: '#/components/schemas/CampaignID'
-        OccurredAt:
+        occurredAt:
           type: string
           format: date-time
-        Type:
+        type:
           type: string
           example: battle
-        Details:
-          type: object
-          additionalProperties: true
+        attributes:
+          $ref: '#/components/schemas/Attributes'
       required:
-        - ID
+        - id
     CampaignEventFactionAssoc:
       type: object
       properties:
-        CampaignID:
+        campaignID:
           $ref: '#/components/schemas/CampaignID'
-        FactionID:
+        factionID:
           $ref: '#/components/schemas/FactionID'
       required:
-        - CampaignID
-        - FactionID
+        - campaignID
+        - factionID
     CampaignEventID:
       type: string
       readOnly: true
@@ -1091,9 +1085,9 @@ components:
     CampaignRole:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        Name:
+        name:
           type: string
           enum:
             - arbiter
@@ -1102,73 +1096,73 @@ components:
           readOnly: true
           example: player
       required:
-        - ID
-        - Name
+        - id
+        - name
     CampaignRoleID:
       type: string
       example: 94lJHE
     CampaignUserAssoc:
       type: object
       properties:
-        CampaignID:
+        campaignID:
           $ref: '#/components/schemas/CampaignID'
-        UserID:
+        userID:
           $ref: '#/components/schemas/UserID'
-        CampaignRoleID:
+        campaignRoleID:
           $ref: '#/components/schemas/CampaignRoleID'
       required:
-        - CampaignID
-        - UserID
-        - CampaignRoleID
+        - campaignID
+        - userID
+        - campaignRoleID
     ContactInfo:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        UserID:
+        userID:
           $ref: '#/components/schemas/UserID'
-        Service:
+        service:
           type: string
           example: Discord
-        Value:
+        value:
           type: string
           example: burgermaster42
       required:
-        - ID
+        - id
     ContactInfoID:
       type: string
       example: QAqz0a
     Equipment:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        OwnerUnitID:
+        ownerUnitID:
           $ref: '#/components/schemas/UnitID'
-        Name:
+        name:
           $ref: '#/components/schemas/Name'
-        Attributes:
+        attributes:
           $ref: '#/components/schemas/Attributes'
       required:
-        - ID
+        - id
     EquipmentID:
       type: string
       example: 1Ejv04
     Faction:
       type: object
       properties: 
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        CampaignID:
+        campaignID:
           $ref: '#/components/schemas/CampaignID'
-        UserID:
+        userID:
           $ref: '#/components/schemas/UserID'
-        Name:
+        name:
           $ref: '#/components/schemas/Name'
-        Attributes:
+        attributes:
           $ref: '#/components/schemas/Attributes'
       required:
-        - ID
+        - id
     FactionID:
       type: string
       example: C8BqwB
@@ -1180,72 +1174,76 @@ components:
     Unit:
       type: object
       properties:
-        ID:
+        id:
           $ref: '#/components/schemas/ID'
-        Name:
+        name:
           $ref: '#/components/schemas/Name'
-        Attributes:
+        attributes:
           $ref: '#/components/schemas/Attributes'
       required:
-        - ID
+        - id
     UnitID:
       type: string
       example: ILXEgB
     User:
       type: object
       properties:
-        ID:
-          $ref: '#/components/schemas/ID'
-        Username:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 01983423-eee8-73b6-a729-e7956c28e5f4
+        username:
           type: string
           example: burgermaster
-        Email:
+        email:
           type: string
           format: email
-        FirstName:
+        firstName:
           type: string
-        LastName:
+        lastName:
           type: string
       required: 
-        - ID
+        - id
     UserID:
       type: string
-      example: hImv4y
+      format: uuid
+      example: 01983423-eee8-73b6-a729-e7956c28e5f4
   examples:
     UnitElias:
       summary: Elias
       description: Sample new Unit Elias
       value:
-        ID: YV6x7P
-        Name: Elias
-        Attributes:
-          Category: Ganger
-          Type: Cawdor Brethren
-          XP: 0
+        id: YV6x7P
+        name: Elias
+        attributes:
+          category: Ganger
+          type: Cawdor Brethren
+          xp: 0
     UnitEliasBody:
       summary: Elias
       description: Sample new Unit Elias
       value:
-        Name: Elias
-        Attributes:
-          Category: Ganger
-          Type: Cawdor Brethren
+        name: Elias
+        attributes:
+          category: Ganger
+          type: Cawdor Brethren
     UnitSnood:
       summary: Snood
       description: Sample Unit Snood the Lesser
       value:
-        ID: ILXEgB
-        Name: Snood the Lesser
-        Attributes:
-          Category: Juve
-          Type: Bonepicker
-          XP: 1
+        id: ILXEgB
+        name: Snood the Lesser
+        attributes:
+          category: Juve
+          type: Bonepicker
+          xp: 1
     UnitSnoodBody:
       summary: Snood
       description: Sample Unit Snood the Lesser
       value:
-        Name: Snood the Lesser
-        Attributes:
-          Category: Juve
-          Type: Bonepicker
-          XP: 1
+        name: Snood the Lesser
+        attributes:
+          category: Juve
+          type: Bonepicker
+          xp: 1
